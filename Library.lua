@@ -1252,7 +1252,8 @@ do
                 wait(0.2);
 
                 local Event;
-                Event = InputService.InputBegan:Connect(function(Input)
+                Event = InputService.InputBegan:Connect(function(Input, gp)
+                    if not gp then
                     local Key;
 
                     if Input.UserInputType == Enum.UserInputType.Keyboard then
@@ -1275,14 +1276,15 @@ do
                     Library:AttemptSave();
 
                     Event:Disconnect();
+                    end
                 end);
             elseif Input.UserInputType == Enum.UserInputType.MouseButton2 and not Library:MouseIsOverOpenedFrame() then
                 ModeSelectOuter.Visible = true;
             end;
         end);
 
-        Library:GiveSignal(InputService.InputBegan:Connect(function(Input)
-            if (not Picking) then
+        Library:GiveSignal(InputService.InputBegan:Connect(function(Input, gp)
+            if not Picking and not gp then
                 if KeyPicker.Mode == 'Toggle' then
                     local Key = KeyPicker.Value;
 
@@ -1314,8 +1316,8 @@ do
             end;
         end))
 
-        Library:GiveSignal(InputService.InputEnded:Connect(function(Input)
-            if (not Picking) then
+        Library:GiveSignal(InputService.InputEnded:Connect(function(Input, gp)
+            if not Picking and not gp then
                 KeyPicker:Update();
             end;
         end))
